@@ -20,7 +20,9 @@ Interpretation rules for the phase state machine. Keep this short; load only whe
 
 `criteria` and `todos` are phase-scoped: sending them while completing any other phase is rejected, so a gate can never be satisfied by pre-filling at `start`.
 
-A blocked transition returns `{"ok": false, "phase": ..., "missing": [...], "blocked_attempts": n}` and exits 1. The attempt is appended to `history` with `"blocked": true` so the audit trail shows how many times a gate fired; the run does not advance and nothing is lost by retrying.
+Every rejected transition - a failed gate, `criteria`/`todos` sent to the wrong phase, or an already-finished run - returns `{"ok": false, "phase": ..., "missing": [...], "blocked_attempts": n}`, exits 1, and is appended to `history` with `"blocked": true`. The run never advances on a rejection, so retrying is safe and the trail shows how often each gate fired.
+
+Text inputs are strict: only strings and numbers count as evidence or criteria. A dict, list, or boolean is treated as empty, so it cannot satisfy a gate by accident.
 
 ## What the engine resolves on its own
 
@@ -32,8 +34,8 @@ A blocked transition returns `{"ok": false, "phase": ..., "missing": [...], "blo
 ## State file
 
 `<dir>/.agent-loop/<run>.json` — fields: `id`, `task`, `created`, `updated`, `phase`, `completed`, `criteria`, `todos`, `policy`, `capabilities`, `blocked`, `history`, plus `finished` once the run completes.
-Run ids are `<UTC timestamp>-<random hex>-<task slug>`; two runs in the same second do not collide.
-Writes are atomic (`os.replace` over a `.json.tmp`) and `advance` takes a `.lock` file, so a crash or a concurrent call cannot truncate a record or double-apply a phase.
+Run ids are `<UTC timestamp>-<random hex>-<task slug>`; the random suffix makes a same-second collision very unlikely rather than impossible.
+Writes are atomic (`os.replace` over a `.json.tmp`) and `advance` takes a `.lock` file, so a crash or a concurrent call cannot truncate a record or double-apply a phase. A lock older than 10 seconds is treated as abandoned and re-taken, so a killed process cannot wedge the run.
 `status` never creates anything: a read on a directory without `.agent-loop` simply returns an empty list.
 
 ## Resuming
@@ -45,4 +47,6 @@ Read `status` first: `phase` is the phase in progress and `gate` says what is st
 - Discovery reflects the filesystem at call time; a newly installed skill is visible on the next call, no restart needed.
 - `dir` must already exist (pass an OS-native path, or omit it for the current directory). A Git Bash style `/c/Users/...` path is translated on Windows.
 - A run id must match `[A-Za-z0-9._-]{1,120}` and must resolve inside `.agent-loop/`; anything else is rejected.
+- The `capability_discovery` gate needs at least one discoverable capability, so a machine with no skills, agents, or commands cannot pass it; install at least one or point `dir` at a project that has some.
+- Capability ids are matched on word boundaries, so a note saying "mathematics" does not satisfy an id of `math`.
 - The engine never calls a model or a network service. Anything requiring judgement stays with the model.

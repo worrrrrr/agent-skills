@@ -50,6 +50,7 @@ GATES = {
 KINDS = ("skills", "agents", "commands")
 HOME = Path.home()
 LOCK_TIMEOUT = 5.0
+LOCK_STALE = 10.0
 RUN_ID = re.compile(r"[A-Za-z0-9._-]{1,120}\Z")
 
 
@@ -58,11 +59,14 @@ def utcnow() -> str:
 
 
 def as_text(value) -> str:
-    if value is None:
-        return ""
+    """Only real text and numbers count; containers and booleans do not."""
     if isinstance(value, str):
         return value.strip()
-    return str(value).strip()
+    if isinstance(value, bool) or value is None:
+        return ""
+    if isinstance(value, (int, float)):
+        return str(value)
+    return ""
 
 
 def need_list(payload: dict, key: str) -> list:
@@ -91,9 +95,10 @@ def slug(text: str, limit: int = 32) -> str:
 def resolve_dir(value) -> Path:
     """Accept an OS-native path; also tolerate a Git Bash /c/Users/... path."""
     raw = as_text(value) or "."
-    match = re.match(r"^/([A-Za-z])/(.*)$", raw)
-    if match:
-        raw = match.group(1).upper() + ":/" + match.group(2)
+    if os.name == "nt":
+        match = re.match(r"^/([A-Za-z])/(.*)$", raw)
+        if match:
+            raw = match.group(1).upper() + ":/" + match.group(2)
     return Path(raw)
 
 
@@ -185,8 +190,15 @@ def load_policy(root: Path) -> dict:
             break
         current = current.parent
 
-    files, rules = [], []
+    files, seen_paths, rules = [], set(), []
     for path in candidates:
+        try:
+            key = str(path.resolve())
+        except OSError:
+            key = str(path)
+        if key in seen_paths:
+            continue
+        seen_paths.add(key)
         if not path.is_file():
             continue
         try:
@@ -217,12 +229,26 @@ def run_lock(directory: Path):
     """Serialize the read-modify-write of a run record."""
     lock_path = directory / ".lock"
     deadline = time.monotonic() + LOCK_TIMEOUT
+    steals = 0
     while True:
         try:
             handle = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(handle, ("%d %s" % (os.getpid(), utcnow())).encode() + bytes([10]))
             os.close(handle)
             break
         except FileExistsError:
+            try:
+                age = time.time() - lock_path.stat().st_mtime
+            except OSError:
+                age = 0.0
+            if age > LOCK_STALE and steals == 0:
+                # owner died without running its finally block
+                steals += 1
+                try:
+                    os.unlink(str(lock_path))
+                except OSError:
+                    pass
+                continue
             if time.monotonic() > deadline:
                 raise TimeoutError("another run.py is mid-write; retry shortly")
             time.sleep(0.05)
@@ -254,6 +280,8 @@ def load_run(root: Path, run_id: str):
         return None
     if not isinstance(state, dict) or state.get("phase") not in PHASES + ["done"]:
         return None
+    if state.get("id") != run_id:
+        return None
     return state
 
 
@@ -268,6 +296,24 @@ def save_run(root: Path, state: dict) -> Path:
 
 def fail(message: str, **extra) -> dict:
     return {"ok": False, "error": message, **extra}
+
+
+def blocked(root: Path, state: dict, phase: str, missing: list) -> dict:
+    """Record a rejected transition so the audit trail shows every gate hit."""
+    state["blocked"] = int(state.get("blocked") or 0) + 1
+    state["updated"] = utcnow()
+    state["history"].append({
+        "phase": phase,
+        "at": state["updated"],
+        "blocked": True,
+        "missing": missing,
+    })
+    try:
+        save_run(root, state)
+    except OSError:
+        pass
+    return {"ok": False, "phase": phase, "missing": missing,
+            "blocked_attempts": state["blocked"]}
 
 
 def op_start(payload: dict) -> dict:
@@ -326,7 +372,7 @@ def advance_locked(root: Path, run_id: str, payload: dict) -> dict:
 
     current = state["phase"]
     if current == "done" or current not in PHASES:
-        return fail("run already finished", phase=current)
+        return blocked(root, state, current, ["run already finished"])
 
     note = as_text(payload.get("note"))
     criteria = need_list(payload, "criteria")
@@ -335,11 +381,13 @@ def advance_locked(root: Path, run_id: str, payload: dict) -> dict:
     # Criteria and todos belong to exactly one phase each; no pre-filling.
     if criteria:
         if current != "goal_contract":
-            return fail("'criteria' is only accepted while completing goal_contract", phase=current)
+            return blocked(root, state, current,
+                           ["'criteria' is only accepted while completing goal_contract"])
         state["criteria"] = dedupe((state.get("criteria") or []) + criteria)
     if todos:
         if current != "plan":
-            return fail("'todos' is only accepted while completing plan", phase=current)
+            return blocked(root, state, current,
+                           ["'todos' is only accepted while completing plan"])
         state["todos"] = dedupe((state.get("todos") or []) + todos)
 
     gate = GATES.get(current)
@@ -362,7 +410,8 @@ def advance_locked(root: Path, run_id: str, payload: dict) -> dict:
         ids = {item["id"].lower() for kind in KINDS for item in caps[kind]}
         if not ids:
             missing.append("no discoverable skills/agents/commands")
-        elif not any(sid in note.lower() for sid in ids):
+        elif not any(re.search(r"(?<![A-Za-z0-9_-])" + re.escape(sid) + r"(?![A-Za-z0-9_-])",
+                               note.lower()) for sid in ids):
             missing.append(
                 "'note' must name at least one discovered capability id (e.g. "
                 + ", ".join(sorted(ids)[:5]) + ")")
@@ -373,17 +422,7 @@ def advance_locked(root: Path, run_id: str, payload: dict) -> dict:
         missing.append("at least one todo ('todos')")
 
     if missing:
-        state["blocked"] = int(state.get("blocked") or 0) + 1
-        state["updated"] = utcnow()
-        state["history"].append({
-            "phase": current,
-            "at": state["updated"],
-            "blocked": True,
-            "missing": missing,
-        })
-        save_run(root, state)
-        return {"ok": False, "phase": current, "missing": missing,
-                "blocked_attempts": state["blocked"]}
+        return blocked(root, state, current, missing)
 
     state["completed"] = dedupe((state.get("completed") or []) + [current])
     state["history"].append({
