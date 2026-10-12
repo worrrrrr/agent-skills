@@ -10,33 +10,33 @@ description: Use when running a task through a structured, auditable agent loop 
 
 ## เฟสและ gate
 
-| # | เฟส | ทำอะไร | gate (ต้องมีก่อนปิดเฟส) |
-| - | --- | ------ | ----------------------- |
-| 0 | `bootstrap_agent` | สร้าง run + ขอบเขตงาน | `task` (ปิดอัตโนมัติตอน `start`) |
-| 1 | `perceive` | รวบรวมบริบท/หลักฐานที่เกี่ยวข้อง | `note` ≥ 10 ตัวอักษร |
-| 2 | `goal_contract` | กำหนดเป้าหมาย + acceptance criteria | `criteria` ≥ 1 |
-| 3 | `policy_check` | โหลดกฎจาก AGENTS.md (global + ไล่ขึ้นจาก cwd) | engine โหลดเอง ต้องได้ ≥ 1 กฎ |
-| 4 | `capability_discovery` | ค้น skills / agents / commands ที่มีอยู่ | engine ค้นเอง ต้องเจอ ≥ 1 สกิล |
-| 5 | `plan` | แตกงานเป็น todo | `todos` ≥ 1 |
-| 6 | `execute_loop` | ลงมือทำจนครบ DoD + สรุปหลักฐาน | `note` ≥ 10 ตัวอักษร |
+| # | เฟส | ทำอะไร | gate (ต้องมีก่อนปิดเฟส) | ใครให้ |
+| - | --- | ------ | ----------------------- | ------ |
+| 0 | `bootstrap_agent` | สร้าง run + ขอบเขตงาน | `task` | โมเดล (ปิดอัตโนมัติตอน `start`) |
+| 1 | `perceive` | รวบรวมบริบท/หลักฐานที่เกี่ยวข้อง | `note` ≥ 10 ตัวอักษร | โมเดล |
+| 2 | `goal_contract` | กำหนดเป้าหมาย + acceptance criteria | `criteria` ≥ 1 | โมเดล |
+| 3 | `policy_check` | โหลดกฎจาก AGENTS.md | ได้ ≥ 1 กฎ | engine |
+| 4 | `capability_discovery` | ค้น skills/agents/commands ที่ใช้ได้ | เจอ ≥ 1 และ `note` ต้อง**ระบุชื่อ** capability อย่างน้อย 1 ตัว | engine + โมเดล |
+| 5 | `plan` | แตกงานเป็น todo | `todos` ≥ 1 | โมเดล |
+| 6 | `execute_loop` | ลงมือทำจนครบ DoD + สรุปหลักฐาน | `note` ≥ 10 ตัวอักษร | โมเดล |
 
 ## Workflow
 
 ```sh
-# 0 + 1) bootstrap แล้ว perceive
-python scripts/run.py '{"op":"start","task":"<งาน>","criteria":["<เกณฑ์เริ่มต้น>"]}'
+# 0+1) bootstrap แล้ว perceive
+python scripts/run.py '{"op":"start","task":"<งาน>"}'
 python scripts/run.py '{"op":"advance","run":"<id>","note":"บริบทและหลักฐานที่รวบรวมได้"}'
 
-# 2) goal_contract
+# 2) goal_contract — criteria รับเฉพาะเฟสนี้
 python scripts/run.py '{"op":"advance","run":"<id>","criteria":["เกณฑ์ 1","เกณฑ์ 2"]}'
 
-# 3) policy_check (engine โหลด AGENTS.md เอง)
+# 3) policy_check — engine โหลด AGENTS.md เอง
 python scripts/run.py '{"op":"advance","run":"<id>"}'
 
-# 4) capability_discovery (engine ค้น skills/agents/commands เอง)
-python scripts/run.py '{"op":"advance","run":"<id>"}'
+# 4) capability_discovery — engine ค้นเอง แต่ note ต้องระบุชื่อที่เจอ
+python scripts/run.py '{"op":"advance","run":"<id>","note":"จะใช้ skill math + agent ผู้รีวิว"}'
 
-# 5) plan
+# 5) plan — todos รับเฉพาะเฟสนี้
 python scripts/run.py '{"op":"advance","run":"<id>","todos":["งานย่อย 1","งานย่อย 2"]}'
 
 # 6) execute_loop — จบแล้ว phase = "done" + summary
@@ -53,9 +53,11 @@ python scripts/run.py '{"op":"advance","run":"<id>","note":"สรุปผล�
 
 ## กฎ
 
-- gate ไม่ครบ → engine คืน `ok:false` + `missing` (exit 1) → เก็บของให้ครบแล้วเรียกซ้ำ **ห้ามข้ามเฟส**
-- `policy_check` / `capability_discovery` เป็นงานของ engine — อย่าไปกรอกข้อมูลเองใน `note`
-- ส่ง `dir` เฉพาะเมื่อไม่ได้รันในโฟลเดอร์งาน (ค่า default = cwd); ใช้ path ปกติของ OS
+- gate ไม่ครบ → คืน `ok:false` + `missing` (exit 1) **ความพยายามที่ถูกบล็อกจะถูกบันทึกใน `history` พร้อมนับใน `blocked_attempts`** — เติมของให้ครบแล้วเรียกซ้ำ ไม่ใช่ข้าม
+- `criteria` รับเฉพาะตอนปิด `goal_contract`; `todos` รับเฉพาะตอนปิด `plan` — เฟสอื่นส่งมาแล้วจะถูกปฏิเสธ (กันการ pre-fill ให้ gate กลายเป็นพิธี)
+- `policy_check` / `capability_discovery` เป็นงานของ engine: ข้อมูลที่บันทึกเป็นของ engine เอง (`note` ที่ส่งไปจะถูกใช้แค่เฟส 4 เพื่อยืนยันว่าเลือก capability จริง)
+- exit code: `0` สำเร็จ / `1` gate ไม่ผ่าน หรือ engine error / `2` input ผิดรูปแบบ — ทุกกรณีคืน JSON บน stdout เสมอ
+- ส่ง `dir` เฉพาะเมื่อไม่ได้รันในโฟลเดอร์งาน (ค่า default = cwd) และโฟลเดอร์นั้นต้องมีอยู่จริง
 - `.agent-loop/*.json` คือ audit trail — อย่าแก้ด้วยมือ
 
 ## Do not
