@@ -9,6 +9,7 @@
 | --- | --- |
 | `math` | เครื่องคำนวณ exact — calc, sympy (สมการ/calculus/matrix), z3 (constraint/SAT/prove), pyswisseph (ephemeris) ผ่าน `scripts/run.py` แบบ JSON-in/JSON-out |
 | `astrology` | คำนวณดวงเต็มระบบจากวันเกิดเดียว: BaZi (สี่เสา), Western tropical, Vedic sidereal (Lahiri), Human Design + ชั้นอ่านคำทำนายภาษาไทย |
+| `skill-maker` | scaffold สกิลใหม่ให้เป็น workflow — สร้าง `SKILL.md` + `scripts/run.py` (engine) + `references/notes.md` พร้อมโครง |
 
 ## ติดตั้ง
 
@@ -28,7 +29,7 @@ npx skills add worrrrrr/agent-skills -g -a opencode -y      # ลง global
 
 ```sh
 mkdir -p ~/.config/opencode/skills
-cp -r skills/math skills/astrology ~/.config/opencode/skills/
+cp -r skills/* ~/.config/opencode/skills/
 ```
 
 ## Dependency
