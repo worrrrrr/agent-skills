@@ -10,6 +10,7 @@
 | `math` | เครื่องคำนวณ exact — calc, sympy (สมการ/calculus/matrix), z3 (constraint/SAT/prove), pyswisseph (ephemeris) ผ่าน `scripts/run.py` แบบ JSON-in/JSON-out |
 | `astrology` | คำนวณดวงเต็มระบบจากวันเกิดเดียว: BaZi (สี่เสา), Western tropical, Vedic sidereal (Lahiri), Human Design + ชั้นอ่านคำทำนายภาษาไทย |
 | `skill-maker` | scaffold สกิลใหม่ให้เป็น workflow — สร้าง `SKILL.md` + `scripts/run.py` (engine) + `references/notes.md` พร้อมโครง |
+| `agent-loop` | บังคับงานผ่าน 7 เฟส (bootstrap_agent → perceive → goal_contract → policy_check → capability_discovery → plan → execute_loop) ด้วย state machine + gate + audit trail (`scripts/run.py`) |
 
 ## ติดตั้ง
 
