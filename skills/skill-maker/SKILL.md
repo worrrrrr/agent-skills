@@ -1,6 +1,7 @@
 ---
 name: skill-maker
 description: Use when creating a new opencode skill as an executable workflow with a deterministic script engine. Triggers on "สร้างสกิล", "new skill", "scaffold skill", "SKILL.md", "workflow skill".
+smoke: python scripts/scaffold.py --help
 ---
 
 # Skill Maker — skill-as-workflow scaffolder

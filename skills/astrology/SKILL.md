@@ -1,6 +1,7 @@
 ---
 name: astrology
 description: Use when calculating or interpreting birth charts and full-spectrum astrological profiles — Western tropical natal charts, Vedic/sidereal (Lahiri) charts, Chinese BaZi / Four Pillars, and Human Design (gates, lines, type, authority, incarnation cross). Triggers on "natal chart", "birth chart", "horoscope", "โหราศาสตร์", "ดวง", "ปาจื่อ", "โป๊ยหยี่", "สี่เสา", "BaZi", "Four Pillars", "Human Design", "Vedic", "Jyotish", "sidereal", "nakshatra", or requests for planetary positions, houses, or gate activations from a birth date/time/location.
+smoke: python scripts/astrology.py
 ---
 
 # Astrology — Full-Spectrum Chart Engine
