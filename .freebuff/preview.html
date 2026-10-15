@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agent-skills — Agent Skills สำหรับงานคำนวณ exact/symbolic และโหราศาสตร์</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --border:#2b3242;
+    --fg:#e6edf3; --muted:#9aa7b8; --accent:#58a6ff; --accent2:#d2a8ff;
+    --green:#3fb950; --amber:#d29922; --code:#0a0d12;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:"Segoe UI",system-ui,-apple-system,"Noto Sans Thai",sans-serif;
+    line-height:1.65;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:40px 22px 80px}
+  header.hero{border-bottom:1px solid var(--border); padding-bottom:26px; margin-bottom:30px}
+  .badge{display:inline-block; font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--border); background:var(--panel);
+    padding:3px 10px; border-radius:999px}
+  h1{font-size:2.1rem; margin:14px 0 8px; letter-spacing:-.01em}
+  .sub{color:var(--muted); font-size:1.05rem; margin:0}
+  h2{font-size:1.25rem; margin:38px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--border)}
+  h2 .n{color:var(--accent); font-family:ui-monospace,Consolas,monospace; margin-right:8px}
+  p{color:#c9d4e2}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,Consolas,"Cascadia Mono",monospace; font-size:.9em;
+    background:var(--code); border:1px solid var(--border); border-radius:5px; padding:1px 6px}
+  pre{background:var(--code); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px; overflow:auto; position:relative}
+  pre code{background:none; border:none; padding:0; font-size:.86rem; line-height:1.55; color:#cdd9e5}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px}
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px 18px;
+    transition:border-color .15s, transform .15s}
+  .card:hover{border-color:var(--accent); transform:translateY(-2px)}
+  .card h3{margin:0 0 6px; font-size:1.02rem; display:flex; align-items:center; gap:8px}
+  .card h3 .dot{width:9px; height:9px; border-radius:50%; background:var(--accent2); flex:none}
+  .card p{margin:0 0 10px; font-size:.92rem; color:var(--muted)}
+  .card .path{font-family:ui-monospace,Consolas,monospace; font-size:.78rem; color:var(--green)}
+  table{width:100%; border-collapse:collapse; font-size:.92rem; background:var(--panel);
+    border:1px solid var(--border); border-radius:10px; overflow:hidden}
+  th,td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top}
+  th{background:var(--panel2); color:var(--accent); font-weight:600; font-size:.82rem;
+    text-transform:uppercase; letter-spacing:.06em}
+  tr:last-child td{border-bottom:none}
+  td code{white-space:nowrap}
+  .tree{font-family:ui-monospace,Consolas,monospace; font-size:.85rem; color:#c9d4e2;
+    background:var(--code); border:1px solid var(--border); border-radius:10px; padding:16px 18px;
+    white-space:pre; overflow:auto}
+  .tree .dir{color:var(--accent)}
+  .tree .py{color:var(--amber)}
+  .tree .md{color:var(--green)}
+  footer{margin-top:46px; padding-top:16px; border-top:1px solid var(--border);
+    color:var(--muted); font-size:.85rem}
+  .tag{display:inline-block; font-size:.72rem; padding:1px 8px; border-radius:999px;
+    border:1px solid var(--border); color:var(--muted); background:var(--panel2); margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">Agent Skills · repository preview</span>
+    <h1>agent-skills</h1>
+    <p class="sub">ชุด Agent Skills สำหรับงานคำนวณแบบ exact/symbolic และโหราศาสตร์เต็มระบบ
+      — ใช้ได้กับ agent ที่รองรับ Agent Skills (OpenCode, Claude Code, Codex, Cursor, …)</p>
+  </header>
+
+  <h2><span class="n">01</span>Skills ทั้ง 6</h2>
+  <div class="grid">
+    <div class="card">
+      <h3><span class="dot"></span>math</h3>
+      <p>เครื่องคำนวณ exact — calc, sympy (สมการ/calculus/matrix), z3 (constraint/SAT/prove),
+         pyswisseph (ephemeris) ผ่าน <code>scripts/run.py</code> แบบ JSON-in/JSON-out</p>
+      <span class="path">skills/math/SKILL.md</span>
+      <span class="tag">sympy</span><span class="tag">z3</span><span class="tag">swisseph</span>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>astrology</h3>
+      <p>คำนวณดวงเต็มระบบจากวันเกิดเดียว: BaZi (สี่เสา), Western tropical,
+         Vedic sidereal (Lahiri), Human Design + ชั้นอ่านคำทำนายภาษาไทย</p>
+      <span class="path">skills/astrology/SKILL.md</span>
+      <span class="tag">natal chart</span><span class="tag">BaZi</span><span class="tag">Human Design</span>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>qa</h3>
+      <p>รัน test/lint/build จริงแล้วสรุปผลเป็น JSON — exit code, จำนวนเทสต์ผ่าน/พัง, เวลา, output tail ให้ supervisor ใช้เป็นหลักฐาน</p>
+      <span class="path">skills/qa/SKILL.md</span>
+      <span class="tag">รันเทสต์</span><span class="tag">lint</span><span class="tag">CI</span>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>supervisor</h3>
+      <p>ตรวจงาน + ให้คะแนนแบบหัวหน้างาน — รับชิ้นงาน + เกณฑ์ acceptance แล้ว engine ตรวจ keyword coverage, ให้คะแนน/เกรด, ชี้ gaps + next_actions</p>
+      <span class="path">skills/supervisor/SKILL.md</span>
+      <span class="tag">หัวหน้างาน</span><span class="tag">ตรวจงาน</span><span class="tag">review work</span>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>skill-maker</h3>
+      <p>scaffold สกิลใหม่ให้เป็น workflow — สร้าง <code>SKILL.md</code> + <code>scripts/run.py</code>
+         (engine) + <code>references/notes.md</code> พร้อมโครง</p>
+      <span class="path">skills/skill-maker/SKILL.md</span>
+      <span class="tag">scaffold</span><span class="tag">new skill</span>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>agent-loop</h3>
+      <p>บังคับงานผ่าน 7 เฟส (bootstrap_agent → perceive → goal_contract → policy_check →
+         capability_discovery → plan → execute_loop) ด้วย state machine + gate + audit trail</p>
+      <span class="path">skills/agent-loop/SKILL.md</span>
+      <span class="tag">state machine</span><span class="tag">audit trail</span>
+    </div>
+  </div>
+
+  <h2><span class="n">02</span>ติดตั้ง</h2>
+  <p>ด้วย skills CLI:</p>
+  <pre><code>npx skills add worrrrrr/agent-skills --list                 # ดูรายชื่อ
+npx skills add worrrrrr/agent-skills -a opencode            # ลงเฉพาะโปรเจกต์
+npx skills add worrrrrr/agent-skills -g -a opencode -y      # ลง global</code></pre>
+  <p>หรือด้วยมือ — คัดลอกไปที่ <code>~/.config/opencode/skills/</code> (global) หรือ <code>.opencode/skills/</code> (project):</p>
+  <pre><code>mkdir -p ~/.config/opencode/skills
+cp -r skills/* ~/.config/opencode/skills/</code></pre>
+
+  <h2><span class="n">03</span>Dependency</h2>
+  <pre><code>pip install sympy z3-solver pyswisseph</code></pre>
+  <table>
+    <tr><th>Skill</th><th>ต้องการ</th></tr>
+    <tr><td><code>math</code></td><td><code>sympy</code> + <code>z3-solver</code> — ส่วน ephemeris ต้องมี <code>pyswisseph</code></td></tr>
+    <tr><td><code>astrology</code></td><td><code>pyswisseph</code> (แนบ <code>assets/*.se1</code> ซึ่งเป็น Swiss Ephemeris data มาให้แล้ว)</td></tr>
+    <tr><td><code>astro.ts</code></td><td>engine สำรองแบบ zero-dependency ต้องรันด้วย <code>npx tsx</code> (ความแม่นต่ำกว่า Python)</td></tr>
+  </table>
+
+  <h2><span class="n">04</span>ใช้งานเร็ว</h2>
+  <pre><code># math — solve สมการผ่าน engine JSON-in/JSON-out
+python skills/math/scripts/run.py '{"op":"solve","eq":"x**2 - 5*x + 6 = 0","symbol":"x"}'
+
+# astrology (year month day hour minute lat lon tz)
+python skills/astrology/scripts/astrology.py 1992 8 8 16 49 6.53995 101.29 7
+python skills/astrology/scripts/reading.py 1992 8 8 16 49 6.53995 101.29 7 m</code></pre>
+
+  <h2><span class="n">05</span>โครงสร้างไฟล์</h2>
+  <div class="tree"><span class="dir">agent-skills/</span>
+├── <span class="md">README.md</span>
+├── <span class="dir">skills/</span>
+│   ├── <span class="dir">math/</span>
+│   │   ├── <span class="md">SKILL.md</span>
+│   │   └── <span class="py">scripts/run.py</span>            <span style="color:#6a737d"># calc|solve|nsolve|diff|integrate|limit|z3solve|auto …</span>
+│   ├── <span class="dir">astrology/</span>
+│   │   ├── <span class="md">SKILL.md</span>
+│   │   ├── <span class="py">scripts/astrology.py</span>      <span style="color:#6a737d"># engine ตัวจริง (Swiss Ephemeris)</span>
+│   │   ├── <span class="py">scripts/reading.py</span>        <span style="color:#6a737d"># ชั้นอ่านคำทำนายภาษาไทย</span>
+│   │   ├── <span class="py">scripts/astro.ts</span>          <span style="color:#6a737d"># fallback zero-dependency</span>
+│   │   ├── <span class="dir">assets/*.se1</span>              <span style="color:#6a737d"># Swiss Ephemeris data</span>
+│   │   └── <span class="dir">references/</span>               <span style="color:#6a737d"># bazi | western | vedic | human-design</span>
+│   ├── <span class="dir">qa/</span>
+│   │   ├── <span class="md">SKILL.md</span>
+│   │   ├── <span class="py">scripts/run.py</span>            <span style="color:#6a737d"># verdict | exit codes | test counts</span>
+│   │   └── <span class="dir">references/notes.md</span>
+│   ├── <span class="dir">supervisor/</span>
+│   │   ├── <span class="md">SKILL.md</span>
+│   │   ├── <span class="py">scripts/run.py</span>            <span style="color:#6a737d"># score | grade | verdict | gaps</span>
+│   │   └── <span class="dir">references/notes.md</span>
+│   ├── <span class="dir">skill-maker/</span>
+│   │   ├── <span class="md">SKILL.md</span>
+│   │   └── <span class="py">scripts/scaffold.py</span>
+│   └── <span class="dir">agent-loop/</span>
+│       ├── <span class="md">SKILL.md</span>
+│       ├── <span class="py">scripts/run.py</span>            <span style="color:#6a737d"># 7-phase state machine + gates</span>
+│       └── <span class="dir">references/notes.md</span></div>
+
+  <h2><span class="n">06</span>agent-loop — 7 เฟส</h2>
+  <table>
+    <tr><th>#</th><th>เฟส</th><th>gate (ต้องมีก่อนปิดเฟส)</th></tr>
+    <tr><td>0</td><td><code>bootstrap_agent</code></td><td><code>task</code></td></tr>
+    <tr><td>1</td><td><code>perceive</code></td><td><code>note</code> ≥ 10 ตัวอักษร</td></tr>
+    <tr><td>2</td><td><code>goal_contract</code></td><td><code>criteria</code> ≥ 1</td></tr>
+    <tr><td>3</td><td><code>policy_check</code></td><td>ได้ ≥ 1 กฎจาก AGENTS.md</td></tr>
+    <tr><td>4</td><td><code>capability_discovery</code></td><td>เจอ ≥ 1 และ note ระบุชื่อ capability</td></tr>
+    <tr><td>5</td><td><code>plan</code></td><td><code>todos</code> ≥ 1</td></tr>
+    <tr><td>6</td><td><code>execute_loop</code></td><td><code>note</code> ≥ 10 ตัวอักษร → <code>phase = "done"</code></td></tr>
+  </table>
+
+  <footer>
+    ดูข้อมูลเต็มใน <code>README.md</code> และ <code>skills/*/SKILL.md</code> ของ repo นี้ ·
+    หน้านี้เป็น static preview ที่สร้างจากเอกสารของโปรเจกต์ ไม่รันสคริปต์ใด ๆ
+  </footer>
+
+</div>
+</body>
+</html>
