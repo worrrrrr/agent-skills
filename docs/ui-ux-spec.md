@@ -90,13 +90,13 @@ Layout สองคอลัมน์บน desktop (1 คอลัมน์ม�
 2. Tabs: `ภาพรวม` | `Inputs` | `ตัวอย่าง` | `กติกา (notes)`
    - **Inputs**: ตาราง field/type/required จาก SKILL.md — แปลงเป็น schema อัตโนมัติ
    - **ตัวอย่าง**: code block พร้อมปุ่ม `ส่งเข้า playground` (เติม payload ลงแผงขวาอัตโนมัติ)
-   - **กติกา**: render `references/notes.md`
+   - **กติกา**: render `references/*.md` ถ้าสกิลมี
 
 **คอลัมน์ขวา — Playground**
 - **PayloadEditor**: Textarea (JSON, monospace) + ตรวจ JSON syntax ทันที (เส้นขอบแดง + ข้อความใต้ช่องเมื่อเพี้ยน) + ปุ่ม `รัน` (Primary)
 - **ResultPanel** ใต้ editor:
   - แถบสถานะ: `verdict` เป็น Badge สี (pass=success, fail=destructive) + `duration_ms`
-  - `pre` JSON output พร้อมปุ่ม copy; ถ้าเป็น `qa`/`supervisor` ให้สรุปเป็น stat chips (`score`, `tests_passed`, `tests_failed`)
+  - `pre` JSON output พร้อมปุ่ม copy; ถ้า result มี `coverage`/`verdict` ให้สรุปเป็น stat chips จาก field ที่มีจริง
   - `output_tail` หรือ `next_actions` แสดงเป็น Alert destructive เมื่อ fail
 - **สถานะ**: ปุ่มรัน = Spinner + disabled; error ของ engine → Alert พร้อม stderr; timeout → เตือน "อาจค้าง — ลองลด timeout"
 - **ความปลอดภัย**: payload ที่รันได้ถูกจำกัด whitelist ต่อสกิล (v1: รันผ่าน allowlist ของ demo payload เท่านั้น ไม่รับคำสั่งเสรีจากเว็บ)
@@ -152,7 +152,7 @@ Layout สองคอลัมน์บน desktop (1 คอลัมน์ม�
 
 ---
 
-## 9. Acceptance Criteria (ใช้กับ `supervisor` + `qa` ของ repo นี้ได้เลย)
+## 9. Acceptance Criteria (ตรวจด้วยคำสั่ง/agent ที่มีใน repo)
 
 1. `npx shadcn add` ครบทุกคอมโพเนนต์ที่อ้างในสเปก ไม่มีการเขียนปุ่ม/การ์ดเองซ้ำ
 2. ทุกหน้ามี 4 สถานะ: loading (skeleton), empty, error (+retry), success
@@ -169,5 +169,5 @@ Layout สองคอลัมน์บน desktop (1 คอลัมน์ม�
 
 - บันทึกผลรันลง D1/R2 (ถ้าขึ้น hosting) + ประวัติข้ามเครื่อง
 - share ลิงก์ payload (URL-encoded) ให้เพื่อนเปิดแล้วเห็นผลเดิม
-- "รันทั้งชุด": เรียน qa หลายคำสั่งพร้อมกันในแท็บเดียว
+- "รันทั้งชุด": รัน demo payload หลายตัวพร้อมกันในแท็บเดียว
 - ติดตั้งสกิลจากเว็บ (เปิด `npx skills add` ด้วย deep link)

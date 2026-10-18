@@ -44,8 +44,10 @@ With no args and no env var it runs a built-in default chart.
 ```python
 from astrology import run_full_astronomical_profile
 run_full_astronomical_profile(1992, 8, 8, 16, 49, 6.53995, 101.29, 7,
-                              ephe_path="assets")
+                              ephe_path="../assets")  # relative to cwd = scripts/
 ```
+
+`ephe_path` is resolved against the current working directory, not the file — pass `skills/astrology/assets` when running from the repo root.
 
 Install dependency if missing: `pip install pyswisseph`.
 
@@ -65,7 +67,7 @@ Output covers: true solar time + four pillars + ten deities + five-element count
 
 ### 2. TypeScript — zero-dependency, approximate
 
-`scripts/astro.ts` re-implements the same four systems with no dependencies, for environments without Python/Swiss Ephemeris. Run with `npx tsx scripts/astro.ts` — **but note it exports functions only; there is no CLI runner.** Write a small driver that imports it:
+`scripts/astro.ts` re-implements the same four systems with no dependencies, for environments without Python/Swiss Ephemeris. It exports functions only — there is no CLI. Write a small driver and run it with `npx tsx`:
 
 ```ts
 import { computeChart } from './astro';

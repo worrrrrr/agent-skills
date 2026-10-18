@@ -1,6 +1,7 @@
 ---
 name: math
 description: Use when solving equations, symbolic calculus, constraint/SAT problems, or Swiss ephemeris astrology with sympy, z3-solver, pyswisseph. Triggers on keywords sympy, z3, swisseph, ephemeris, สมการ, โหราศาสตร์.
+smoke: python scripts/run.py '{"op":"calc","expr":"2^10"}'
 ---
 
 # Math Skill
@@ -24,7 +25,7 @@ python scripts/run.py batch problems43.txt skilloutput.txt
 # ops: calc | solve | nsolve | diff | integrate | limit | eigen | det | inv | simplify | sum | series | dsolve | factor | modsolve | residue | cfrac | nullspace | jordan | svd | matexp | z3solve | auto
 ```
 
-`auto` รับโจทย์ดิบ (อังกฤษ/ไทย: lim, integrate, diff, sum, series, ODE แบบ y''/y', mod, factor, residue, cfrac, อสมการ, Diophantine) แล้วเลือก op เองพร้อมบอกว่า detect เป็นอะไร
+`auto` รับโจทย์ดิบ (อังกฤษ/ไทย: lim, integrate, diff, sum, series, ODE แบบ y''/y', mod, factor, residue, cfrac, อสมการ, Diophantine รูป `expr = expr in Z`) แล้วเลือก op เองพร้อมบอกว่า detect เป็นอะไร — เขียนคูณด้วย `*` และยกกำลังด้วย `**` (`2x`/`x^2` ไม่รับ)
 
 `solve` accepts `=` equations, returns exact + exact_numeric + numeric (with residuals). `nsolve` sweeps guesses and dedups. Prefer the engine over hand-writing sympy/z3. Fall back to raw sympy/z3 below only for cases the engine does not cover.
 
