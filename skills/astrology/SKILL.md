@@ -63,7 +63,7 @@ python scripts/reading.py 1992 8 8 16 49 6.53995 101.29 7 m
 
 It auto-loads the bundled `assets/*.se1` ephemeris files. Its interpretation tables are in Thai (`ELEMENT_TH`, `DEITY_TH`, `NAKSHATRA_TH`, `TYPE_TH`, etc.) and can be extended in place. It also computes, for BaZi: **12 Life Stages (十二長生)**, **18 神煞 stars** (文昌/Intelligence, 太極貴人, 桃花, 驛馬, 華蓋, 干祿, 紅艷煞, …), **Na Yin (納音)**, **Kong Wang (空亡)**, **day-master strength** with favourable/avoid elements (喜用神/忌神), **Da Yun (大運)** 10-year cycles annotated with their ten-deity and favourable-element mark, **Liu Nian (流年)** annual pillars, and a final Thai **summary reading** (section 5) that ties BaZi + Human Design + Western together. The 神煞 use classical formulas (some schools differ); the rest are exact. `reading.py` computes the BaZi ten deities itself with correct polarity (direct vs indirect), because `astrology.py`'s built-in table labels every same-element stem as "Day Master".
 
-Output covers: true solar time + four pillars + ten deities + five-element counts; Ascendant/MC, planets, Placidus cusps, aspects; sidereal rashi/nakshatra/pada/navamsha; and Human Design type, strategy, authority, definition, profile, incarnation cross, variable, centers, channels, and personality/design activations.
+Output covers: true solar time + four pillars + ten deities + five-element counts; Ascendant/MC, planets, Placidus cusps (Porphyry fallback above ~66° latitude), aspects; sidereal rashi/nakshatra/pada/navamsha; and Human Design type, strategy, authority, definition, profile, incarnation cross, variable, centers, channels, and personality/design activations.
 
 ### 2. TypeScript — zero-dependency, approximate
 
@@ -84,7 +84,7 @@ const chart = computeChart({
 console.log(chart);
 ```
 
-Treat TS output as sign/gate-level only. Precision caveats are documented at the top of `astro.ts`: Sun ~0.01°, Moon ~0.1–0.3°, planets Keplerian (no perturbations, up to ~1° on outer planets), Placidus unreliable above ~66° latitude. **If a planet sits near a sign/house/gate boundary, say so and verify with the Python engine rather than asserting.**
+Treat TS output as sign/gate-level only. Precision caveats are documented at the top of `astro.ts`: Sun ~0.01°, Moon ~0.1–0.3°, planets Keplerian (no perturbations, up to ~1° on outer planets), Placidus is undefined above ~66° latitude — the Python engine falls back to Porphyry (then whole sign) and reports `house_system`. **If a planet sits near a sign/house/gate boundary, say so and verify with the Python engine rather than asserting.**
 
 ## Interpreting results
 

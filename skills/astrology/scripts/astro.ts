@@ -475,7 +475,7 @@ export function placidusHouses(jd: number, latitude: number, longitudeEast: numb
 		}
 	}
 
-	return cusps;
+	return cusps.slice(1);
 }
 
 // ============================================================

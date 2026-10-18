@@ -300,7 +300,17 @@ _SIGN_NAMES = [
 class WesternEngine:
     @staticmethod
     def calculate(jd: float, lat: float, lon: float) -> Dict[str, Any]:
-        houses_result = swe.houses(jd, lat, lon, b'P')
+        # Placidus is undefined near the poles; fall back rather than crash.
+        try:
+            houses_result = swe.houses(jd, lat, lon, b'P')
+            house_system = "Placidus"
+        except swe.Error:
+            try:
+                houses_result = swe.houses(jd, lat, lon, b'O')  # Porphyry
+                house_system = "Porphyry"
+            except swe.Error:
+                houses_result = swe.houses(jd, lat, lon, b'W')  # Whole sign
+                house_system = "Whole sign"
         asc = houses_result[1][0]
         mc = houses_result[1][1]
         house_cusps = list(houses_result[0])
@@ -347,6 +357,7 @@ class WesternEngine:
             "ascendant": round(asc, 4),
             "midheaven": round(mc, 4),
             "houses": [round(c, 4) for c in house_cusps],
+            "house_system": house_system,
             "planets": planets,
             "aspects": aspects,
         }
@@ -837,6 +848,7 @@ def run_full_astronomical_profile(
         print(f"  {planet:<10}: {info['sign']:<12} at {info['sign_degree']:>6.2f}° (Total Degree: {info['degree']:.2f}°)")
 
     print("\n--- HOUSE CUSPS ---")
+    print(f"  System: {western_data.get('house_system', 'Placidus')}")
     for idx, cusp in enumerate(western_data["houses"], 1):
         print(f"  House {idx:<2} : {cusp:.2f}°")
 
