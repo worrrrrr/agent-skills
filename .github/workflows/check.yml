@@ -1,0 +1,20 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install sympy z3-solver pyswisseph
+      - name: Harness selfcheck (repo + every skill smoke)
+        run: python harness.py --selfcheck
+      - name: Harness tests
+        run: python -m unittest discover -s tests -v
