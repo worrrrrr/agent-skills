@@ -41,7 +41,7 @@ python scripts/run.py '{"op":"report","problem":"...","answers":{"inversion":{"�
 1. `plan` (หรือ `analyze`) เพื่อเลือกโมเดลและได้คำถาม
 2. ตอบ `questions` ของแต่ละโมเดลด้วยข้อเท็จจริงของโจทย์ — ใส่ `deliverable` ให้ครบ
 3. ยิง `analyze` พร้อม `answers` เพื่อเช็ค `coverage`; เติมช่องที่ `missing`/`empty_fields`
-4. `report` เอา markdown ไปใช้; ถ้า `complete:false` ให้บอกผู้ใช้ตรง ๆ ว่ายังขาดอะไร
+4. `report` เอา markdown ไปใช้; ถ้า `coverage.complete:false` ให้บอกผู้ใช้ตรง ๆ ว่ายังขาดอะไร
 
 ## กฎ
 

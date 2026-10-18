@@ -13,6 +13,14 @@
 | `w8m` | World 8 Models — เลือกโมเดลคิดที่ตรงโจทย์, แจกชุดคำถาม, ตรวจความครอบคลุมคำตอบ, ประกอบรายงาน ผ่าน `scripts/run.py` |
 | `craft` | Doctrine ขั้นต่ำสำหรับเขียน/รีวิวโค้ดและ prompt: minimal diff, พิสูจน์ด้วยคำสั่งจริง, failure path, prompt-as-contract (ไม่มี engine) |
 
+## Docs
+
+- [self-model-template.md](docs/self-model-template.md) — ฟอร์มกลางสำหรับโปรไฟล์/แผน 90 วัน (ไม่มีข้อมูลส่วนตัว)
+- [self-model.neutral.md](docs/self-model.neutral.md) — โปรไฟล์แบบ band + กลไก + robustness
+- [reading.rules.md](docs/reading.rules.md) — กฎตำรา → ข้อสรุป (BaZi/HD/Western/Vedic/Big Five)
+- [habits.neutral.md](docs/habits.neutral.md) — แปลงข้อสรุปเป็นนิสัยที่วัดได้
+- [character.example.md](docs/character.example.md) — ตัวอย่างสร้างตัวละครจากกฎ (fiction)
+
 ## ติดตั้ง
 
 ### ด้วย skills CLI
