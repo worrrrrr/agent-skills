@@ -38,6 +38,7 @@ python harness.py '{"op":"status","run":"<id>"}'
 
 - `run` เขียน `.harness/<run>/report.json` + `report.md`; exit 0 = pass, 1 = fail
 - check แบบ `skill` อ่าน `smoke:` จาก `SKILL.md` ของสกิลนั้น (ไม่ hardcode)
+- check แบบ `agent_loop_run` ผ่านเฉพาะเมื่อ run นั้น `phase=done`, `open=[]`, `verified=true`
 - รับ JSON ก้อนเดียวเหมือน engine อื่น
 
 ## ติดตั้ง

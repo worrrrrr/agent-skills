@@ -57,6 +57,13 @@ class HarnessTest(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertFalse(out["ok"])
 
+    def test_agent_loop_run_must_be_done_and_verified(self):
+        out, code = call({"op": "run", "task": "loop", "dir": self.dir,
+                          "checks": [{"id": "loop",
+                                      "agent_loop_run": "does-not-exist"}]})
+        self.assertEqual(code, 1)
+        self.assertEqual(out["verdict"], "fail")
+
     def test_status_reads_the_report(self):
         out, _ = call({"op": "run", "task": "ok", "dir": self.dir,
                        "checks": [{"id": "one", "cmd": 'python -c "print(1)"'}]})

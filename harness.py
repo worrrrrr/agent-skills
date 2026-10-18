@@ -67,10 +67,46 @@ def skill_smoke(base: Path, name: str):
     return directory, smoke.group(1).strip()
 
 
+def agent_loop_check(base: Path, run_id: str):
+    """Treat an agent-loop run as a check: done + open=[] + verified=true."""
+    engine = Path.home() / ".agents" / "skills" / "agent-loop" / "scripts" / "run.py"
+    if not engine.is_file():
+        return False, {"error": "agent-loop engine not found", "engine": str(engine)}
+    payload = {"op": "status", "run": run_id, "dir": str(base)}
+    try:
+        proc = subprocess.run([sys.executable, str(engine), json.dumps(payload)],
+                              capture_output=True, text=True, encoding="utf-8",
+                              errors="replace", timeout=60)
+    except (OSError, subprocess.SubprocessError) as error:
+        return False, {"error": str(error)}
+    try:
+        data = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return False, {"error": "invalid engine output",
+                       "out": (proc.stdout or proc.stderr)[-1000:]}
+    ok = (data.get("ok") is True and data.get("phase") == "done"
+          and data.get("open") == [] and data.get("verified") is True)
+    return ok, data
+
+
 def run_one(base: Path, check: dict) -> dict:
     cid = as_text(check.get("id")) or as_text(check.get("skill")) or as_text(check.get("cmd"))
     if not cid:
         raise ValueError("each check needs id, cmd or skill")
+    loop_run = as_text(check.get("agent_loop_run"))
+    if loop_run:
+        started = time.monotonic()
+        ok, data = agent_loop_check(base, loop_run)
+        return {
+            "id": cid,
+            "cmd": "agent-loop status " + loop_run,
+            "cwd": str(base),
+            "exit": 0 if ok else 1,
+            "duration_ms": int((time.monotonic() - started) * 1000),
+            "timed_out": False,
+            "out": json.dumps(data, ensure_ascii=False)[-4000:],
+        }
+
     skill = as_text(check.get("skill"))
     if skill:
         cwd, cmd = skill_smoke(base, skill)
