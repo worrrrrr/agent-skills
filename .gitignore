@@ -5,3 +5,4 @@ node_modules/
 .agent-loop/
 GOALS.md
 WORLD.md
+.harness/

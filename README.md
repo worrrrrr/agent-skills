@@ -15,11 +15,30 @@
 
 ## Docs
 
+- [SPEC.md](SPEC.md) — สัญญาเป้าหมาย + acceptance criteria + known limits
 - [self-model-template.md](docs/self-model-template.md) — ฟอร์มกลางสำหรับโปรไฟล์/แผน 90 วัน (ไม่มีข้อมูลส่วนตัว)
 - [self-model.neutral.md](docs/self-model.neutral.md) — โปรไฟล์แบบ band + กลไก + robustness
 - [reading.rules.md](docs/reading.rules.md) — กฎตำรา → ข้อสรุป (BaZi/HD/Western/Vedic/Big Five)
 - [habits.neutral.md](docs/habits.neutral.md) — แปลงข้อสรุปเป็นนิสัยที่วัดได้
 - [character.example.md](docs/character.example.md) — ตัวอย่างสร้างตัวละครจากกฎ (fiction)
+
+## Harness
+
+รันงานเป็นชุด check แล้วให้ **report เป็นตัวบอกผล** (verdict มาจาก exit code ไม่ใช่คำอธิบาย)
+
+```sh
+python harness.py --selfcheck        # repo gate + smoke ทุกสกิล ในคำสั่งเดียว
+python harness.py '{"op":"run","task":"ปิดรอบ repo","checks":[
+  {"id":"repo","cmd":"python check.py"},
+  {"id":"math","skill":"math"}]}'
+
+python harness.py '{"op":"list"}'
+python harness.py '{"op":"status","run":"<id>"}'
+```
+
+- `run` เขียน `.harness/<run>/report.json` + `report.md`; exit 0 = pass, 1 = fail
+- check แบบ `skill` อ่าน `smoke:` จาก `SKILL.md` ของสกิลนั้น (ไม่ hardcode)
+- รับ JSON ก้อนเดียวเหมือน engine อื่น
 
 ## ติดตั้ง
 
@@ -41,6 +60,15 @@ npx skills add worrrrrr/agent-skills -g -a opencode -y      # ลง global
 mkdir -p ~/.config/opencode/skills
 cp -r skills/* ~/.config/opencode/skills/
 ```
+
+### Windows — junction (single source, ไม่มีสำเนา)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+ลิงก์ทุกโฟลเดอร์ใน `skills/` ไปที่ `~/.agents/skills/` แบบ junction — แก้ repo แล้ว runtime เห็นทันที
+ถ้าเป้าหมายมีอยู่แล้วและไม่ใช่ junction สคริปต์จะข้าม (ไม่ทับ)
 
 ## ตรวจสุขภาพ
 
