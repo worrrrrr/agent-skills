@@ -304,6 +304,11 @@ class WesternEngine:
         asc = houses_result[1][0]
         mc = houses_result[1][1]
         house_cusps = list(houses_result[0])
+        # pyswisseph รุ่นเก่าคืน cusps 13 ตัว (index 0 = 0.00 ไม่ได้ใช้)
+        # ถ้าไม่ตัดทิ้ง เลขเรือนที่พิมพ์จะเพี้ยนไป 1 ตำแหน่ง (House 1 = 0.00,
+        # House 2 = ลัคนา) และ reading.py จะหาเรือนของดาวผิดทั้งหมด
+        if len(house_cusps) == 13 and house_cusps[0] == 0:
+            house_cusps = house_cusps[1:]
 
         planets = {}
         for name, pid in zip(_PLANET_NAMES, _PLANET_IDS):
