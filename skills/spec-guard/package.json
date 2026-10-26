@@ -1,0 +1,9 @@
+{
+  "name": "spec-guard",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Thin npx wrapper over scripts/run.py (single engine) — SPEC-POS-001 guard rails",
+  "bin": { "spec-guard": "bin/cli.mjs" },
+  "files": ["bin", "scripts", "SKILL.md"],
+  "engines": { "node": ">=18" }
+}

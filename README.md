@@ -12,6 +12,7 @@
 | `astrology` | คำนวณดวงเต็มระบบจากวันเกิดเดียว: BaZi (สี่เสา), Western tropical, Vedic sidereal (Lahiri), Human Design + ชั้นอ่านคำทำนายภาษาไทย |
 | `w8m` | World 8 Models — เลือกโมเดลคิดที่ตรงโจทย์, แจกชุดคำถาม, ตรวจความครอบคลุมคำตอบ, ประกอบรายงาน ผ่าน `scripts/run.py` |
 | `craft` | Doctrine ขั้นต่ำสำหรับเขียน/รีวิวโค้ดและ prompt: minimal diff, พิสูจน์ด้วยคำสั่งจริง, failure path, prompt-as-contract (ไม่มี engine) |
+| `spec-guard` | ตรวจ SPEC-POS-001 ด้วย `scripts/run.py` (JSON-in/JSON-out): layout backend/frontend + 4 แกน, scope boom (authored vs generated), abandonment risk — ใช้ก่อนเปิดโปรเจกต์ใหม่ |
 
 ## Docs
 
