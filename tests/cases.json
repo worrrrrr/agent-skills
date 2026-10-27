@@ -3,56 +3,56 @@
     "id": "C1-word-pattern",
     "case": "_อโ_ษ เติมอะไรได้บ้าง",
     "keywords": ["อโ"],
-    "skill": "slot-audit",
-    "must_catch": "lexicon/domain ไม่ได้ประกาศ (พจนานุกรมอะไร นับคำประสมไหม) ก่อนตอบ",
+    "where": "owner.prompt",
+    "must_catch": "lexicon/domain ไม่ได้ประกาศ -> 0 คำตอบ ไม่ใช่ ไม่มีคำตอบ",
     "wrong_behavior": "ตอบ ขอโทษ แล้วอ้างว่าเป็นคำตอบเดียวโดยไม่มี lexicon"
   },
   {
     "id": "C2-date-no-year",
     "case": "14 กุมภาเป็นวันอะไร",
     "keywords": ["กุมภา"],
-    "skill": "slot-audit",
-    "must_catch": "ไม่มีปี -> ตอบวันในสัปดาห์ไม่ได้ ตอบได้แค่วันวาเลนไทน์ หรือถามปี",
-    "wrong_behavior": "ยกปีจากบทสนทนาก่อนหน้ามาเติมเองแล้วตอบวันอาทิตย์"
+    "where": "owner.prompt",
+    "must_catch": "ไม่มีปี -> ตอบวันในสัปดาห์ไม่ได้ ตอบได้แค่วันวาเลนไทน์",
+    "wrong_behavior": "ยกปีจากบทสนทนาก่อนหน้ามาเติมเอง"
   },
   {
     "id": "C3-rain-yesterday",
     "case": "เมื่อวานฝนตกไหม",
     "keywords": ["ฝน"],
-    "skill": "frame-ask",
-    "must_catch": "ที่ไหน/ช่วงไหน/นิยามฝนตก + แหล่งข้อมูล ณ จุดเวลา",
-    "wrong_behavior": "ตอบว่าไม่มีข้อมูลโดยไม่ถามที่ไหน หรือเดาสภาพอากาศ"
+    "where": "owner.prompt",
+    "must_catch": "ที่ไหน/ช่วงไหน/นิยาม + แหล่งข้อมูล ณ จุดเวลา",
+    "wrong_behavior": "ตอบว่าไม่มีข้อมูลโดยไม่ถามที่ไหน"
   },
   {
     "id": "C4-apology-alone",
     "case": "ขอโทษ",
     "keywords": ["ขอโทษ"],
-    "skill": "slot-audit",
-    "must_catch": "REASON/AGENT/RECIPIENT ว่าง -> felicitous แต่ไม่ informative",
-    "wrong_behavior": "สรุปว่าเขาไม่ได้ขอโทษ หรือเดาว่าเขาทำอะไรผิด"
+    "where": "owner.prompt",
+    "must_catch": "บทบาท/การณ์ ว่าง -> ใช้ได้แต่ไม่ informative",
+    "wrong_behavior": "เดาว่าเขาทำอะไรผิด"
   },
   {
     "id": "C5-file-eio",
     "case": "ReplaceFileW EIO Win32 32",
     "keywords": ["EIO"],
-    "skill": "evidence-class",
-    "must_catch": "EIO เป็นถังพัก error, ต้องอ่าน numeric code (32 = sharing violation)",
-    "wrong_behavior": "สรุปสาเหตุทันที (Obsidian/ACL) โดยไม่มีการทดลองหรือหลักฐาน E1"
+    "where": "owner.prompt",
+    "must_catch": "EIO เป็นถังพัก error -> ต้องอ่าน numeric code (32 = sharing violation)",
+    "wrong_behavior": "สรุปสาเหตุทันทีโดยไม่มีการทดลอง"
   },
   {
     "id": "C6-sea-level-rain",
     "case": "ระดับน้ำทะเลขึ้นเพราะฝนมากขึ้นไหม",
     "keywords": ["ระดับน้ำ"],
-    "skill": "frame-ask",
-    "must_catch": "stock vs flow + scope (geocentric vs relative) + แหล่งวัด",
+    "where": "owner.prompt",
+    "must_catch": "stock vs flow + scope + แหล่งวัด",
     "wrong_behavior": "ตอบว่าใช่เพราะฝนตกมากขึ้น"
   },
   {
     "id": "C7-exam-options",
-    "case": "จาก 20 ตุลาคม 2026 วันที่ 1 มกราคม 2027 เป็นวันอะไร ก.วันปีใหม่ ข.วันศุกร์",
-    "keywords": ["วันปีใหม่"],
-    "skill": "slot-audit",
-    "must_catch": "ตัวเลือกที่ทำให้ข้อมูลในโจทย์ไร้ประโยชน์ = สัญญาณอ่านผิด -> ข.วันศุกร์",
-    "wrong_behavior": "ตอบ ก.วันปีใหม่ แล้วไม่ใช้ anchor เลย"
+    "case": "โจทย์ ก./ข. ที่ตัวเลือกต่างชนิดกัน",
+    "keywords": ["ตัวเลือก"],
+    "where": "owner.prompt",
+    "must_catch": "ตัวเลือกที่ทำให้ข้อมูลในโจทย์ไร้ประโยชน์ = สัญญาณอ่านผิด",
+    "wrong_behavior": "เลือกคำตอบโดยไม่ใช้ anchor ในโจทย์"
   }
 ]
