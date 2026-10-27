@@ -14,6 +14,20 @@
 | `craft` | Doctrine ขั้นต่ำสำหรับเขียน/รีวิวโค้ดและ prompt: minimal diff, พิสูจน์ด้วยคำสั่งจริง, failure path, prompt-as-contract (ไม่มี engine) |
 | `spec-guard` | ตรวจ SPEC-POS-001 ด้วย `scripts/run.py` (JSON-in/JSON-out): layout backend/frontend + 4 แกน, scope boom (authored vs generated), abandonment risk — ใช้ก่อนเปิดโปรเจกต์ใหม่ |
 
+
+## ติดตั้งจากไฟล์ (dist)
+
+```powershell
+# 1) ดาวน์โหลด dist/agent-skills-<version>.zip (หรือ git pull)
+# 2) ติดตั้ง (สำเนา — ใช้ได้ทุกเครื่อง)
+powershell -ExecutionPolicy Bypass -File install.ps1 -FromZip .\dist\agent-skills-0.3.0.zip -Copy
+# 3) หรือลิงก์จาก repo (single source of truth)
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+ติดตั้งได้: `owner.prompt.md` -> `~/.agents/owner.prompt.md` และ `skills/*` -> `~/.agents/skills/*`
+`dist/MANIFEST.json` เก็บ sha256 ของทุกไฟล์ใน zip (ตรวจความครบได้)
+สร้างใหม่: `python scripts/build_dist.py --version x.y.z`
 ## Docs
 
 - [SPEC.md](SPEC.md) — สัญญาเป้าหมาย + acceptance criteria + known limits

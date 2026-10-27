@@ -1,0 +1,112 @@
+{
+  "name": "agent-skills",
+  "version": "0.3.0",
+  "built": "2026-10-27",
+  "files": [
+    {
+      "path": "owner.prompt.md",
+      "bytes": 12313,
+      "sha256": "7755a6639510c55e45a12d470ae01c1bef34149f2ac7987a4e90f8df447f80ab"
+    },
+    {
+      "path": "install.ps1",
+      "bytes": 2819,
+      "sha256": "1f48769221d6b851e969155befffca639b61cdfef9daa75a8b61024af952f424"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6506,
+      "sha256": "2dae8b5da3dfc90c7668d995b91943d93a6008c31ff05c0eb083662d3749dc9f"
+    },
+    {
+      "path": "SPEC.md",
+      "bytes": 6005,
+      "sha256": "5cc598f9688ad8e2afcd0ea12cefa6c2188d91c60cb8b2f4f8403665cb3ee4d3"
+    },
+    {
+      "path": "skills/astrology/references/bazi.md",
+      "bytes": 5275,
+      "sha256": "d466a5669aa177ee4a707750688af68520983d5950f4358bfd116a08880e92d1"
+    },
+    {
+      "path": "skills/astrology/references/human-design.md",
+      "bytes": 5430,
+      "sha256": "ddff283377f4c6ce9421ae1d33c0f4295cfa761400ff129eab6c52d74f63806c"
+    },
+    {
+      "path": "skills/astrology/references/vedic.md",
+      "bytes": 3542,
+      "sha256": "8a92aca3fa97edc909f01a17d293b9f6598ee33f73c4affe5014946e4c0c2090"
+    },
+    {
+      "path": "skills/astrology/references/western.md",
+      "bytes": 4255,
+      "sha256": "871ba46037702fc815611d7d676176f6c88c4f0cfa975294d02d6603d3a62058"
+    },
+    {
+      "path": "skills/astrology/scripts/astro.ts",
+      "bytes": 22544,
+      "sha256": "90f7a13a1128700f52440127765d22ec1f2c24dffd02014e80a3d721fa623c67"
+    },
+    {
+      "path": "skills/astrology/scripts/astrology.py",
+      "bytes": 39445,
+      "sha256": "ce05213534097588a0b19106c5eb658edc9541e9ed2cbb7d2143a21c3453af0c"
+    },
+    {
+      "path": "skills/astrology/scripts/reading.py",
+      "bytes": 52638,
+      "sha256": "bb963090459d251d8006cd9593fa78a35a6fe185036b70441a7ec26540085f48"
+    },
+    {
+      "path": "skills/astrology/SKILL.md",
+      "bytes": 7591,
+      "sha256": "2bf47a2a0c5b0a5b4fe95051343b85275dfe8036cbf8b4a130cb31897dd5c0b5"
+    },
+    {
+      "path": "skills/craft/SKILL.md",
+      "bytes": 4352,
+      "sha256": "fab22429f1c5642626d819cfde2dd2ef0cd37c56f42b719f475c06f586a32c43"
+    },
+    {
+      "path": "skills/math/scripts/run.py",
+      "bytes": 28426,
+      "sha256": "0c9fe32e5034067df74a943e4007d4a8b413882c7a1c275a88904bb7c283d7ed"
+    },
+    {
+      "path": "skills/math/SKILL.md",
+      "bytes": 3412,
+      "sha256": "33b7f304ac74e178edcc706db52b3212f68b41a27fd4123b3692bd8592acf30b"
+    },
+    {
+      "path": "skills/spec-guard/bin/cli.mjs",
+      "bytes": 1576,
+      "sha256": "4c5e1adb63f4b0748be57298d4a4691fc851aea09cf064094051d1835475277b"
+    },
+    {
+      "path": "skills/spec-guard/package.json",
+      "bytes": 289,
+      "sha256": "ceb866fc0c320c2ca5275e571efe5e516aff9a37af0bf1450359031b395c033b"
+    },
+    {
+      "path": "skills/spec-guard/scripts/run.py",
+      "bytes": 9500,
+      "sha256": "6829c5c270b0bc5d0ed0844b745b4a01fb598947281cde01545ce9dfb8858656"
+    },
+    {
+      "path": "skills/spec-guard/SKILL.md",
+      "bytes": 3841,
+      "sha256": "cb0a342f1d4edae2a041a00865e6d74bbb2263c67a59f3cce44f1404a60139b4"
+    },
+    {
+      "path": "skills/w8m/scripts/run.py",
+      "bytes": 33642,
+      "sha256": "3562c0fdd746cabfb407fb718b1ef54a666f4905caba973733ce0dfaf4db33f9"
+    },
+    {
+      "path": "skills/w8m/SKILL.md",
+      "bytes": 4876,
+      "sha256": "4483d466377a36051aa4233cec7168b5b4442c6a2bffa99f34507d14bd38ede9"
+    }
+  ]
+}
