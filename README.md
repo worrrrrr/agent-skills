@@ -11,7 +11,7 @@
 
 ```powershell
 # 1) ติดตั้ง (จาก zip ที่ดาวน์โหลด หรือจาก repo)
-powershell -ExecutionPolicy Bypass -File install.ps1 -FromZip .\dist\agent-skills-0.3.0.zip -Copy
+powershell -ExecutionPolicy Bypass -File install.ps1 -FromZip .\dist\agent-skills-0.3.1.zip -Copy
 
 # 2) ตรวจว่าติดตั้งครบ
 python check.py
@@ -71,7 +71,7 @@ prompt เดียว (134 บรรทัด, ~12 KB) ที่สรุปว
 ## แพ็กเกจแจกจ่าย (dist)
 
 ```sh
-python scripts/build_dist.py --version 0.3.0
+python scripts/build_dist.py --version 0.3.1
 ```
 
 ได้ `dist/agent-skills-<version>.zip` + `dist/MANIFEST.json` (sha256 ของทุกไฟล์)
