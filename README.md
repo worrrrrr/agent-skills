@@ -13,6 +13,9 @@
 | `w8m` | World 8 Models — เลือกโมเดลคิดที่ตรงโจทย์, แจกชุดคำถาม, ตรวจความครอบคลุมคำตอบ, ประกอบรายงาน ผ่าน `scripts/run.py` |
 | `craft` | Doctrine ขั้นต่ำสำหรับเขียน/รีวิวโค้ดและ prompt: minimal diff, พิสูจน์ด้วยคำสั่งจริง, failure path, prompt-as-contract (ไม่มี engine) |
 | `spec-guard` | ตรวจ SPEC-POS-001 ด้วย `scripts/run.py` (JSON-in/JSON-out): layout backend/frontend + 4 แกน, scope boom (authored vs generated), abandonment risk — ใช้ก่อนเปิดโปรเจกต์ใหม่ |
+| `slot-audit` | หาช่องที่โจทย์ไม่ได้ให้ (ปี/ที่ไหน/นิยาม/หน่วย) ก่อนตอบ แล้วถามครั้งเดียวให้ครอบทุกช่อง — กันการเดาค่าที่ไม่มีในโจทย์ (doctrine) |
+| `frame-ask` | 3 ด่านก่อนตอบคำถามเกี่ยวกับโลก: scope · base rate · แหล่งข้อมูล (stock vs flow) — กันคำตอบที่ดูดีแต่ตรวจไม่ได้ (doctrine) |
+| `evidence-class` | ติดป้าย E1-E5 ให้ทุกคำกล่าวอ้าง (คำนวณ/ตำรา/แมป/เจตนา/พฤติกรรม) และห้ามเลื่อนชั้นเอง (doctrine) |
 
 ## Docs
 
