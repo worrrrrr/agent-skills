@@ -45,7 +45,10 @@ for d in skills:
             fails.append(f"{d.name}: dangling ref {ref}")
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
-listed = re.findall(r"^\|\s*`([^`]+)`\s*\|", readme, re.M)
+# ตาราง skills อยู่ใน section "## Skills" เท่านั้น — ตารางอื่น (ติดตั้ง/สถานะ) ไม่ใช่รายชื่อ skill
+skills_section = re.search(r"^## Skills\s*$(.*?)^## ", readme, re.M | re.S)
+scope = skills_section.group(1) if skills_section else readme
+listed = re.findall(r"^\|\s*`([^`]+)`\s*\|", scope, re.M)
 if sorted(listed) != names:
     fails.append(f"README skills {listed} != folders {names}")
 for s in sorted(set(re.findall(r"python skills/([^/]+)/", readme))):

@@ -1,6 +1,6 @@
 {
   "name": "agent-skills",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "built": "2026-10-27",
   "files": [
     {
@@ -15,8 +15,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6506,
-      "sha256": "2dae8b5da3dfc90c7668d995b91943d93a6008c31ff05c0eb083662d3749dc9f"
+      "bytes": 10379,
+      "sha256": "ce78da3cba54759872a404964e280ccd3022eb17f1f96fcf04cb74e539bf5f04"
     },
     {
       "path": "SPEC.md",
